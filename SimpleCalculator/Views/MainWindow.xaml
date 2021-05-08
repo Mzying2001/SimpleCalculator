@@ -22,6 +22,12 @@
         <KeyBinding Gesture="Esc" Command="{Binding ClearResultsCommand}"/>
     </Window.InputBindings>
 
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Closing">
+            <behaviors:InvokeCommandAction Command="{Binding WindowClosingCommand}"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
     <Grid
         Background="LightGray">
         <Grid.ColumnDefinitions>
@@ -47,6 +53,10 @@
                     Header="Clear all results"
                     InputGestureText="Esc"
                     Command="{Binding ClearResultsCommand}"/>
+                <MenuItem
+                    Header="Restore results at startup"
+                    IsChecked="{Binding RestoreResultsAtStartup}"
+                    Command="{Binding ToggleRestoreResultsAtStartupCommand}"/>
             </MenuItem>
             <MenuItem
                 Height="25"

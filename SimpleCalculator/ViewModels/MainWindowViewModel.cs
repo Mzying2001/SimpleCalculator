@@ -1,9 +1,11 @@
 ﻿using SimpleCalculator.Commands;
 using SimpleCalculator.Models;
+using SimpleJson;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -12,6 +14,8 @@ namespace SimpleCalculator.ViewModels
 {
     class MainWindowViewModel : NotificationObject
     {
+        const string RESULTS_JSON = @".\Results.json";
+
         public ICommand CalculateCommand { get; set; }
         public ICommand SaveResultCommand { get; set; }
         public ICommand RemoveItemCommand { get; set; }
@@ -19,6 +23,8 @@ namespace SimpleCalculator.ViewModels
         public ICommand ClearResultsCommand { get; set; }
         public ICommand ShowAboutCommand { get; set; }
         public ICommand ViewSourceCommand { get; set; }
+        public ICommand WindowClosingCommand { get; set; }
+        public ICommand ToggleRestoreResultsAtStartupCommand { get; set; }
 
         private string _result = "0";
 
@@ -29,6 +35,18 @@ namespace SimpleCalculator.ViewModels
             {
                 _result = value;
                 RaisePropertyChanged("Result");
+            }
+        }
+
+        private bool _restoreResultsAtStartup;
+
+        public bool RestoreResultsAtStartup
+        {
+            get => _restoreResultsAtStartup;
+            set
+            {
+                _restoreResultsAtStartup = value;
+                RaisePropertyChanged("RestoreResultsAtStartup");
             }
         }
 
@@ -131,9 +149,54 @@ namespace SimpleCalculator.ViewModels
             }).Dispose();
         }
 
+        private void ToggleRestoreResultsAtStartup()
+        {
+            RestoreResultsAtStartup = !RestoreResultsAtStartup;
+        }
+
+        private void RestoreResults()
+        {
+            try
+            {
+                foreach (var item in JsonReader.ReadArrayFile<JObject>(RESULTS_JSON))
+                    ResultItems.Add(JsonConvert.Deserialize<ResultItem>(item));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SaveResults()
+        {
+            try
+            {
+                JsonWriter.WriteArrayFile(RESULTS_JSON, (from item in ResultItems select JsonConvert.Serialize(item)).ToArray());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void WindowClosing()
+        {
+            if (RestoreResultsAtStartup)
+                SaveResults();
+            else
+            {
+                if (System.IO.File.Exists(RESULTS_JSON))
+                    System.IO.File.Delete(RESULTS_JSON);
+            }
+        }
+
         public MainWindowViewModel()
         {
             ResultItems = new ObservableCollection<ResultItem>();
+            RestoreResultsAtStartup = System.IO.File.Exists(RESULTS_JSON);
+
+            if (RestoreResultsAtStartup)
+                RestoreResults();
 
             CalculateCommand = new DelegateCommand(Calculate);
             SaveResultCommand = new DelegateCommand(SaveResult);
@@ -142,6 +205,8 @@ namespace SimpleCalculator.ViewModels
             ClearResultsCommand = new DelegateCommand(ClearResults);
             ShowAboutCommand = new DelegateCommand(ShowAbout);
             ViewSourceCommand = new DelegateCommand(ViewSource);
+            WindowClosingCommand = new DelegateCommand(WindowClosing);
+            ToggleRestoreResultsAtStartupCommand = new DelegateCommand(ToggleRestoreResultsAtStartup);
         }
     }
 }
