@@ -38,6 +38,10 @@ namespace SimpleCalculator.Models
                     });
                 }
             }
+
+            if (stack.Count > 1)
+                throw new Exception("Invalid expression.");
+
             return stack.Pop();
         }
 
