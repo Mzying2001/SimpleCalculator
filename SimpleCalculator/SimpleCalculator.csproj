@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Mzying2001.SimpleJson" Version="1.0.4" />
   </ItemGroup>
 
 </Project>
