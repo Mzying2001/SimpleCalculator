@@ -1,0 +1,149 @@
+﻿<Window x:Class="SimpleCalculator.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleCalculator"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:m="clr-namespace:SimpleCalculator.Models"
+        xmlns:vm="clr-namespace:SimpleCalculator.ViewModels"
+        mc:Ignorable="d"
+        
+        x:Name="mainWindow"
+        Title="Calculator"
+        Height="450"
+        Width="600">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Esc" Command="{Binding ClearResultsCommand}"/>
+    </Window.InputBindings>
+
+    <Grid
+        Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="0"
+            VerticalContentAlignment="Stretch">
+            <MenuItem
+                Height="25"
+                Header="Options">
+                <MenuItem
+                    Header="Clear all results"
+                    InputGestureText="Esc"
+                    Command="{Binding ClearResultsCommand}"/>
+            </MenuItem>
+            <MenuItem
+                Height="25"
+                Header="Help">
+                <MenuItem
+                    Header="About"
+                    Command="{Binding ShowAboutCommand}"/>
+                <MenuItem
+                    Header="View source"
+                    Command="{Binding ViewSourceCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <ListBox
+            Grid.Column="1"
+            Grid.Row="1"
+            Margin="0,10"
+            Background="Transparent"
+            BorderThickness="0"
+            HorizontalContentAlignment="Stretch"
+            ItemsSource="{Binding ResultItems}">
+            <ListBox.ItemTemplate>
+                <DataTemplate
+                    DataType="{x:Type m:ResultItem}">
+                    <Border
+                        CornerRadius="10"
+                        Background="White">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                Margin="10,20"
+                                FontSize="16">
+                                <Run Text="{Binding Experssion}"/> = <Run Text="{Binding Result}"/>
+                            </TextBlock>
+                            <Button
+                                Grid.Column="1"
+                                Margin="15,0,0,0"
+                                Width="70"
+                                Height="30"
+                                Content="Copy"
+                                Command="{Binding Source={x:Reference Name=mainWindow}, Path=DataContext.CopyItemValueCommand}"
+                                CommandParameter="{Binding Result}"/>
+                            <Button
+                                Grid.Column="2"
+                                Margin="0,0,15,0"
+                                Width="70"
+                                Height="30"
+                                Content="Remove"
+                                Command="{Binding Source={x:Reference Name=mainWindow}, Path=DataContext.RemoveItemCommand}"
+                                CommandParameter="{Binding Experssion}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Border
+            Grid.Column="1"
+            Grid.Row="2"
+            CornerRadius="10,10,0,0"
+            Background="White">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    Margin="15,25"
+                    BorderThickness="0"
+                    FontSize="20">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger
+                            EventName="TextChanged">
+                            <i:InvokeCommandAction
+                                Command="{Binding CalculateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=TextBox}, Path=Text}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBox.InputBindings>
+                        <KeyBinding
+                            Key="Enter"
+                            Command="{Binding SaveResultCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=TextBox}, Path=Text}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="25,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding Result, StringFormat= \= \{0\}}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
