@@ -102,17 +102,8 @@ namespace SimpleCalculator.ViewModels
 
         private void RemoveItem(object item)
         {
-            if (item == null)
-                return;
-
-            for (int i = 0; i < ResultItems.Count; i++)
-            {
-                if (ResultItems[i].Experssion == item.ToString())
-                {
-                    ResultItems.RemoveAt(i);
-                    break;
-                }
-            }
+            if (item is ResultItem resultItem)
+                ResultItems.Remove(resultItem);
         }
 
         private void CopyItemValue(object value)

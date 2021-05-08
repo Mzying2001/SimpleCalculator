@@ -101,7 +101,7 @@
                                 Height="30"
                                 Content="Remove"
                                 Command="{Binding Source={x:Reference Name=mainWindow}, Path=DataContext.RemoveItemCommand}"
-                                CommandParameter="{Binding Experssion}"/>
+                                CommandParameter="{Binding}"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
