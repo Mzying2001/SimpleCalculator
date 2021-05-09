@@ -8,7 +8,7 @@ namespace SimpleCalculator.Models
     {
         public static double Calculate(string expression)
         {
-            return string.IsNullOrEmpty(expression) ? 0.0 : Calculate(ToSuffixExpression(expression));
+            return Calculate(ToSuffixExpression(expression));
         }
 
         public static double Calculate(double num1, double num2, char oper) => oper switch
