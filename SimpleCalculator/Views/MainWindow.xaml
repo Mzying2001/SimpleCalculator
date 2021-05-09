@@ -98,7 +98,7 @@
                             </TextBlock>
                             <Button
                                 Grid.Column="1"
-                                Margin="15,0,0,0"
+                                Margin="0"
                                 Width="70"
                                 Height="30"
                                 Content="Copy"
@@ -116,6 +116,20 @@
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <behaviors:Interaction.Triggers>
+                <behaviors:EventTrigger
+                    EventName="MouseDoubleClick">
+                    <behaviors:InvokeCommandAction
+                        Command="{Binding UpdateInputTextCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=ListBox}, Path=SelectedItem}"/>
+                </behaviors:EventTrigger>
+                <behaviors:EventTrigger
+                    EventName="MouseRightButtonUp">
+                    <behaviors:InvokeCommandAction
+                        Command="{Binding CopyItemValueCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=ListBox}, Path=SelectedItem}"/>
+                </behaviors:EventTrigger>
+            </behaviors:Interaction.Triggers>
         </ListBox>
 
         <Border
@@ -136,7 +150,7 @@
                     Text="{Binding InputText}">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger
-                            EventName="TextChanged">
+                            EventName="KeyUp">
                             <behaviors:InvokeCommandAction
                                 Command="{Binding UpdateInputTextCommand}"
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=TextBox}, Path=Text}"/>
@@ -151,7 +165,7 @@
                 </TextBox>
                 <TextBlock
                     Grid.Column="1"
-                    Margin="25,0"
+                    Margin="0,0,25,0"
                     VerticalAlignment="Center"
                     Text="{Binding Result, StringFormat= \= \{0\}}"/>
             </Grid>

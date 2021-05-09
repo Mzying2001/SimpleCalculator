@@ -137,7 +137,10 @@ namespace SimpleCalculator.ViewModels
         {
             if (value == null)
                 return;
-            Clipboard.SetText(value.ToString());
+
+            var str = value is ResultItem item ? item.Result.ToString() : value.ToString();
+            if (str != Clipboard.GetText())
+                Clipboard.SetText(str);
         }
 
         private void ClearResults()
@@ -205,6 +208,20 @@ namespace SimpleCalculator.ViewModels
             {
                 InputText = str;
                 Calculate();
+            }
+            else if (input is ResultItem item)
+            {
+                var sb = new StringBuilder();
+                foreach (var c in item.Experssion)
+                {
+                    sb.Append(c switch
+                    {
+                        '×' => '*',
+                        '÷' => '/',
+                        _ => c
+                    });
+                }
+                UpdateInputText(sb.ToString());
             }
         }
 
