@@ -16,7 +16,6 @@ namespace SimpleCalculator.ViewModels
     {
         const string RESULTS_JSON = @".\Results.json";
 
-        public ICommand CalculateCommand { get; set; }
         public ICommand SaveResultCommand { get; set; }
         public ICommand RemoveItemCommand { get; set; }
         public ICommand CopyItemValueCommand { get; set; }
@@ -25,6 +24,19 @@ namespace SimpleCalculator.ViewModels
         public ICommand ViewSourceCommand { get; set; }
         public ICommand WindowClosingCommand { get; set; }
         public ICommand ToggleRestoreResultsAtStartupCommand { get; set; }
+        public ICommand UpdateInputTextCommand { get; set; }
+
+        private string _inputText;
+
+        public string InputText
+        {
+            get => _inputText;
+            set
+            {
+                _inputText = value;
+                RaisePropertyChanged("InputText");
+            }
+        }
 
         private string _result = "0";
 
@@ -62,14 +74,11 @@ namespace SimpleCalculator.ViewModels
             }
         }
 
-        private void Calculate(object input)
+        private void Calculate()
         {
             try
             {
-                if (input is string expression)
-                    Result = Calculator.Calculate(expression).ToString();
-                else
-                    throw new Exception("Input is not a string.");
+                Result = string.IsNullOrWhiteSpace(InputText) ? "0" : Calculator.Calculate(InputText).ToString();
             }
             catch (Exception e)
             {
@@ -179,7 +188,7 @@ namespace SimpleCalculator.ViewModels
             }
         }
 
-        public void WindowClosing()
+        private void WindowClosing()
         {
             if (RestoreResultsAtStartup)
                 SaveResults();
@@ -187,6 +196,15 @@ namespace SimpleCalculator.ViewModels
             {
                 if (System.IO.File.Exists(RESULTS_JSON))
                     System.IO.File.Delete(RESULTS_JSON);
+            }
+        }
+
+        private void UpdateInputText(object input)
+        {
+            if (input is string str)
+            {
+                InputText = str;
+                Calculate();
             }
         }
 
@@ -198,7 +216,6 @@ namespace SimpleCalculator.ViewModels
             if (RestoreResultsAtStartup)
                 RestoreResults();
 
-            CalculateCommand = new DelegateCommand(Calculate);
             SaveResultCommand = new DelegateCommand(SaveResult);
             RemoveItemCommand = new DelegateCommand(RemoveItem);
             CopyItemValueCommand = new DelegateCommand(CopyItemValue);
@@ -207,6 +224,7 @@ namespace SimpleCalculator.ViewModels
             ViewSourceCommand = new DelegateCommand(ViewSource);
             WindowClosingCommand = new DelegateCommand(WindowClosing);
             ToggleRestoreResultsAtStartupCommand = new DelegateCommand(ToggleRestoreResultsAtStartup);
+            UpdateInputTextCommand = new DelegateCommand(UpdateInputText);
         }
     }
 }

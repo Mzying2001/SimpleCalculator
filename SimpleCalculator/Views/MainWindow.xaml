@@ -132,12 +132,13 @@
                     Grid.Column="0"
                     Margin="15,25"
                     BorderThickness="0"
-                    FontSize="20">
+                    FontSize="20"
+                    Text="{Binding InputText}">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger
                             EventName="TextChanged">
                             <behaviors:InvokeCommandAction
-                                Command="{Binding CalculateCommand}"
+                                Command="{Binding UpdateInputTextCommand}"
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=TextBox}, Path=Text}"/>
                         </behaviors:EventTrigger>
                     </behaviors:Interaction.Triggers>
