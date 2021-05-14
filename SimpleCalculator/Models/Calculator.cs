@@ -17,6 +17,7 @@ namespace SimpleCalculator.Models
             '-' => num2 - num1,
             '*' => num2 * num1,
             '/' => num2 / num1,
+            '^' => Math.Pow(num2, num1),
              _  => throw new Exception($"Operator \"{oper}\" is not supported.")
         };
 
@@ -134,6 +135,7 @@ namespace SimpleCalculator.Models
             '-' => 1,
             '*' => 2,
             '/' => 2,
+            '^' => 3,
              _  => 0
         };
 
