@@ -88,28 +88,22 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock
                                 Grid.Column="0"
-                                Margin="10,20"
+                                Margin="15,20"
                                 FontSize="16">
                                 <Run Text="{Binding Experssion}"/> = <Run Text="{Binding Result}"/>
                             </TextBlock>
                             <Button
-                                Grid.Column="1"
-                                Margin="0"
-                                Width="70"
-                                Height="30"
-                                Content="Copy"
-                                Command="{Binding Source={x:Reference Name=mainWindow}, Path=DataContext.CopyItemValueCommand}"
-                                CommandParameter="{Binding Result}"/>
-                            <Button
                                 Grid.Column="2"
                                 Margin="0,0,15,0"
-                                Width="70"
-                                Height="30"
-                                Content="Remove"
+                                Width="20"
+                                Height="20"
+                                Foreground="#D8000000"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Content="×"
                                 Command="{Binding Source={x:Reference Name=mainWindow}, Path=DataContext.RemoveItemCommand}"
                                 CommandParameter="{Binding}"/>
                         </Grid>
