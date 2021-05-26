@@ -88,11 +88,19 @@ namespace SimpleCalculator.ViewModels
 
         private void SaveResult(object expression)
         {
-            if (!double.TryParse(Result, out double result))
+            double result;
+            try
+            {
+                result = Calculator.Calculate(expression.ToString());
+            }
+            catch
+            {
                 return;
+            }
             if (expression is string expstr)
             {
                 expstr = expstr.Trim();
+                InputText = string.Empty;
 
                 if (string.IsNullOrEmpty(expstr))
                     return;
