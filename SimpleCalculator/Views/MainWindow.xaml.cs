@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleCalculator.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace SimpleCalculator.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainWindowViewModel ViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            ViewModel = (MainWindowViewModel)DataContext;
+            Left = ViewModel.Settings.MainWindowStatus.Left;
+            Top = ViewModel.Settings.MainWindowStatus.Top;
+            Width = ViewModel.Settings.MainWindowStatus.Width;
+            Height = ViewModel.Settings.MainWindowStatus.Height;
         }
     }
 }

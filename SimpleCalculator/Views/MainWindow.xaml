@@ -24,7 +24,9 @@
 
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Closing">
-            <behaviors:InvokeCommandAction Command="{Binding WindowClosingCommand}"/>
+            <behaviors:InvokeCommandAction
+                Command="{Binding WindowClosingCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Window}}"/>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 

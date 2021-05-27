@@ -16,7 +16,7 @@ namespace SimpleCalculator.ViewModels
 {
     class MainWindowViewModel : NotificationObject
     {
-        private Settings Settings { get; set; }
+        public Settings Settings { get; set; }
 
         public ICommand SaveResultCommand { get; set; }
         public ICommand RemoveItemCommand { get; set; }
@@ -201,10 +201,19 @@ namespace SimpleCalculator.ViewModels
             }
         }
 
-        private void WindowClosing()
+        private void WindowClosing(object window)
         {
             if (RestoreResultsAtStartup)
                 SaveResults();
+
+            if (window is Window mainWindow)
+            {
+                Settings.MainWindowStatus.Left = mainWindow.Left;
+                Settings.MainWindowStatus.Top = mainWindow.Top;
+                Settings.MainWindowStatus.Width = mainWindow.Width;
+                Settings.MainWindowStatus.Height = mainWindow.Height;
+            }
+
             SaveSettings();
         }
 
@@ -263,7 +272,7 @@ namespace SimpleCalculator.ViewModels
         {
             ResultItems = new ObservableCollection<ResultItem>();
 
-            if (Settings.RestoreResultsAtStartup && System.IO.File.Exists(RESULTS_JSON))
+            if (RestoreResultsAtStartup && System.IO.File.Exists(RESULTS_JSON))
                 RestoreResults();
         }
 
