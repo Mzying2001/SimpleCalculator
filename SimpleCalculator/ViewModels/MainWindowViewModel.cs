@@ -16,6 +16,8 @@ namespace SimpleCalculator.ViewModels
 {
     class MainWindowViewModel : NotificationObject
     {
+        private Settings Settings { get; set; }
+
         public ICommand SaveResultCommand { get; set; }
         public ICommand RemoveItemCommand { get; set; }
         public ICommand CopyItemValueCommand { get; set; }
@@ -50,14 +52,12 @@ namespace SimpleCalculator.ViewModels
             }
         }
 
-        private bool _restoreResultsAtStartup;
-
         public bool RestoreResultsAtStartup
         {
-            get => _restoreResultsAtStartup;
+            get => Settings.RestoreResultsAtStartup;
             set
             {
-                _restoreResultsAtStartup = value;
+                Settings.RestoreResultsAtStartup = value;
                 RaisePropertyChanged("RestoreResultsAtStartup");
             }
         }
@@ -191,7 +191,9 @@ namespace SimpleCalculator.ViewModels
         {
             try
             {
-                JsonWriter.WriteArrayFile(RESULTS_JSON, (from item in ResultItems select JsonConvert.Serialize(item)).ToArray());
+                JsonWriter.WriteArrayFile(RESULTS_JSON, (from item
+                                                         in ResultItems
+                                                         select JsonConvert.Serialize(item)).ToArray());
             }
             catch (Exception e)
             {
@@ -203,11 +205,7 @@ namespace SimpleCalculator.ViewModels
         {
             if (RestoreResultsAtStartup)
                 SaveResults();
-            else
-            {
-                if (System.IO.File.Exists(RESULTS_JSON))
-                    System.IO.File.Delete(RESULTS_JSON);
-            }
+            SaveSettings();
         }
 
         private void UpdateInputText(object input)
@@ -233,13 +231,46 @@ namespace SimpleCalculator.ViewModels
             }
         }
 
-        public MainWindowViewModel()
+        private void InitSettings()
+        {
+            if (System.IO.File.Exists(SETTINGS_JSON))
+            {
+                try
+                {
+                    var json = JsonReader.ReadFile(SETTINGS_JSON);
+                    Settings = JsonConvert.Deserialize<Settings>(json);
+                    return;
+                }
+                catch { }
+            }
+            Settings = new Settings();
+        }
+
+        private void SaveSettings()
+        {
+            try
+            {
+                var json = JsonConvert.Serialize(Settings);
+                JsonWriter.WriteFile(SETTINGS_JSON, json);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void InitResultItems()
         {
             ResultItems = new ObservableCollection<ResultItem>();
-            RestoreResultsAtStartup = System.IO.File.Exists(RESULTS_JSON);
 
-            if (RestoreResultsAtStartup)
+            if (Settings.RestoreResultsAtStartup && System.IO.File.Exists(RESULTS_JSON))
                 RestoreResults();
+        }
+
+        public MainWindowViewModel()
+        {
+            InitSettings();
+            InitResultItems();
 
             SaveResultCommand = new DelegateCommand(SaveResult);
             RemoveItemCommand = new DelegateCommand(RemoveItem);

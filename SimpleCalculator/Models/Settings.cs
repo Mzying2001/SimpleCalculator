@@ -4,12 +4,9 @@
     {
         public bool RestoreResultsAtStartup { get; set; }
 
-        public static Settings DefaultSettings
+        public Settings()
         {
-            get => new Settings()
-            {
-                RestoreResultsAtStartup = true,
-            };
+            RestoreResultsAtStartup = true;
         }
     }
 }

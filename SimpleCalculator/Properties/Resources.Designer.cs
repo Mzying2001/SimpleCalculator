@@ -77,5 +77,14 @@ namespace SimpleCalculator.Properties {
                 return ResourceManager.GetString("RESULTS_JSON", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 .\Data\Settings.json 的本地化字符串。
+        /// </summary>
+        internal static string SETTINGS_JSON {
+            get {
+                return ResourceManager.GetString("SETTINGS_JSON", resourceCulture);
+            }
+        }
     }
 }

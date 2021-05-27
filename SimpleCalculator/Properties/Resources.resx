@@ -123,4 +123,7 @@
   <data name="RESULTS_JSON" xml:space="preserve">
     <value>.\Data\Results.json</value>
   </data>
+  <data name="SETTINGS_JSON" xml:space="preserve">
+    <value>.\Data\Settings.json</value>
+  </data>
 </root>
