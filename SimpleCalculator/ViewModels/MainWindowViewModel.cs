@@ -10,12 +10,12 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
+using static SimpleCalculator.Properties.Resources;
+
 namespace SimpleCalculator.ViewModels
 {
     class MainWindowViewModel : NotificationObject
     {
-        const string RESULTS_JSON = @".\Results.json";
-
         public ICommand SaveResultCommand { get; set; }
         public ICommand RemoveItemCommand { get; set; }
         public ICommand CopyItemValueCommand { get; set; }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using static SimpleCalculator.Properties.Resources;
+
 namespace SimpleCalculator
 {
     /// <summary>
@@ -13,5 +15,12 @@ namespace SimpleCalculator
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            if (!System.IO.Directory.Exists(DATA_PATH))
+                System.IO.Directory.CreateDirectory(DATA_PATH);
+
+            base.OnStartup(e);
+        }
     }
 }
