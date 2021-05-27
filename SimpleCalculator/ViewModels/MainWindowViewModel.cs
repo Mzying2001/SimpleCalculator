@@ -97,6 +97,8 @@ namespace SimpleCalculator.ViewModels
             {
                 return;
             }
+            if (double.IsNaN(result) || double.IsInfinity(result))
+                return;
             if (expression is string expstr)
             {
                 expstr = expstr.Trim();
