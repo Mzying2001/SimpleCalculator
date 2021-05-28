@@ -12,7 +12,9 @@
         x:Name="mainWindow"
         Title="Calculator"
         Height="450"
-        Width="600">
+        Width="600"
+        MinHeight="300"
+        MinWidth="450">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
