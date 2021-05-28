@@ -21,14 +21,17 @@
     </Window.DataContext>
 
     <Window.InputBindings>
-        <KeyBinding Gesture="Esc" Command="{Binding ClearResultsCommand}"/>
+        <KeyBinding
+            Gesture="Esc"
+            Command="{Binding ClearResultsCommand}"/>
     </Window.InputBindings>
 
     <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Closing">
+        <behaviors:EventTrigger
+            EventName="Closing">
             <behaviors:InvokeCommandAction
                 Command="{Binding WindowClosingCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Window}}"/>
+                CommandParameter="{Binding ElementName=mainWindow}"/>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
