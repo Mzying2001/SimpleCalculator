@@ -2,4 +2,4 @@
 
 A simple calculator
 
-![Main](https://raw.githubusercontent.com/Mzying2001/SimpleCalculator/images/SimpleCalculator/Main.png)
+![Main](https://github.com/Mzying2001/SimpleCalculator/blob/master/images/Main.png)
