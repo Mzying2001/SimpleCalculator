@@ -63,7 +63,7 @@
                 <MenuItem
                     Header="Restore results at startup"
                     IsChecked="{Binding RestoreResultsAtStartup}"
-                    Command="{Binding ToggleRestoreResultsAtStartupCommand}"/>
+                    Command="{Binding ToggleRestoreResultsCommand}"/>
             </MenuItem>
             <MenuItem
                 Height="25"
@@ -148,15 +148,7 @@
                     Margin="15,25"
                     BorderThickness="0"
                     FontSize="20"
-                    Text="{Binding InputText}">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger
-                            EventName="KeyUp">
-                            <behaviors:InvokeCommandAction
-                                Command="{Binding UpdateInputTextCommand}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=TextBox}, Path=Text}"/>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
+                    Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding
                             Key="Enter"
@@ -168,7 +160,7 @@
                     Grid.Column="1"
                     Margin="0,0,25,0"
                     VerticalAlignment="Center"
-                    Text="{Binding Result, StringFormat= \= \{0\}}"/>
+                    Text="{Binding Result, StringFormat= \= \{0\}, TargetNullValue=\= 0}"/>
             </Grid>
         </Border>
     </Grid>

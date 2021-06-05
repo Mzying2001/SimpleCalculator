@@ -25,7 +25,7 @@ namespace SimpleCalculator.ViewModels
         public ICommand ShowAboutCommand { get; set; }
         public ICommand ViewSourceCommand { get; set; }
         public ICommand WindowClosingCommand { get; set; }
-        public ICommand ToggleRestoreResultsAtStartupCommand { get; set; }
+        public ICommand ToggleRestoreResultsCommand { get; set; }
         public ICommand UpdateInputTextCommand { get; set; }
 
         private string _inputText;
@@ -37,10 +37,11 @@ namespace SimpleCalculator.ViewModels
             {
                 _inputText = value;
                 RaisePropertyChanged("InputText");
+                Calculate();
             }
         }
 
-        private string _result = "0";
+        private string _result;
 
         public string Result
         {
@@ -78,7 +79,8 @@ namespace SimpleCalculator.ViewModels
         {
             try
             {
-                Result = string.IsNullOrWhiteSpace(InputText) ? "0" : Calculator.Calculate(InputText).ToString();
+                Result = string.IsNullOrWhiteSpace(InputText) ? "0" :
+                         Calculator.Calculate(InputText).ToString();
             }
             catch (Exception e)
             {
@@ -160,7 +162,8 @@ namespace SimpleCalculator.ViewModels
 
         private void ShowAbout()
         {
-            MessageBox.Show($"SimpleCalculator v{Application.ResourceAssembly.GetName().Version} by Mzying2001", "About");
+            var msg = $"SimpleCalculator v{Application.ResourceAssembly.GetName().Version} by Mzying2001";
+            MessageBox.Show(msg, "About");
         }
 
         private void ViewSource()
@@ -171,7 +174,7 @@ namespace SimpleCalculator.ViewModels
             }).Dispose();
         }
 
-        private void ToggleRestoreResultsAtStartup()
+        private void ToggleRestoreResults()
         {
             RestoreResultsAtStartup = !RestoreResultsAtStartup;
         }
@@ -221,12 +224,7 @@ namespace SimpleCalculator.ViewModels
 
         private void UpdateInputText(object input)
         {
-            if (input is string str)
-            {
-                InputText = str;
-                Calculate();
-            }
-            else if (input is ResultItem item)
+            if (input is ResultItem item)
             {
                 var sb = new StringBuilder();
                 foreach (var c in item.Experssion)
@@ -238,7 +236,7 @@ namespace SimpleCalculator.ViewModels
                         _ => c
                     });
                 }
-                UpdateInputText(sb.ToString());
+                InputText = sb.ToString();
             }
         }
 
@@ -290,7 +288,7 @@ namespace SimpleCalculator.ViewModels
             ShowAboutCommand = new DelegateCommand(ShowAbout);
             ViewSourceCommand = new DelegateCommand(ViewSource);
             WindowClosingCommand = new DelegateCommand(WindowClosing);
-            ToggleRestoreResultsAtStartupCommand = new DelegateCommand(ToggleRestoreResultsAtStartup);
+            ToggleRestoreResultsCommand = new DelegateCommand(ToggleRestoreResults);
             UpdateInputTextCommand = new DelegateCommand(UpdateInputText);
         }
     }
